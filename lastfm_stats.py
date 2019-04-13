@@ -5,18 +5,39 @@ import os
 import spotipy
 import spotipy.util as util
 
+os.chdir('C:/Users/JackLidgley/Documents')
+
+'''
+Find file with authentications in it
+
+Ensure that the file with Spotify & Last.fm authentications in it is in a subdirectory of the current Python
+shell directory. Note that if you are searching through your entire filesystem, the find() function will
+take a long time to execute.
+'''
+def find(name, path):
+    for root, dirs, files in os.walk(path):
+        if name in files:
+            return os.path.join(root, name)
+
+name = 'Lastfm-Stats-Auth.txt'
+path = os.getcwd()
+
+authfile = find(name,path)
+authframe = pd.read_csv(authfile,delimiter=',')
+
+
 '''
 Last.fm authentications
 '''
-key = '53fe696d9a2a99714a824e4d8c063fa5'
-username = 'JackLidge'
+key = authframe['key'][0]
+username = authframe['username'][0]
 
 '''
 Spotify authentications
 '''
-os.environ["SPOTIPY_CLIENT_ID"] = 'ab092841c2b44c06be11dd4e2b812966'
-os.environ["SPOTIPY_CLIENT_SECRET"] = '84fdc7267c2441379ad2e1a61dbc83fe'
-os.environ["SPOTIPY_REDIRECT_URI"] = 'https://github.com/JackLidge/Lastfm-Stats'
+os.environ["SPOTIPY_CLIENT_ID"] = authframe['spotipy_client_id'][0]
+os.environ["SPOTIPY_CLIENT_SECRET"] = authframe['spotipy_client_secret'][0]
+os.environ["SPOTIPY_REDIRECT_URI"] = authframe['spotipy_redirect_uri'][0]
 
 pause_duration = 0.2
 
@@ -99,8 +120,9 @@ Spotify API Section
 '''
 
 username = 'jacklidgley95'
+token_grab_name = 'Jack Lidgley'
 
-token = util.prompt_for_user_token(username)
+token = util.prompt_for_user_token(token_grab_name) #<-- currently this step doesn't work
 sp = spotipy.Spotify(auth=token)
 playlists = sp.user_playlists(username)
 
