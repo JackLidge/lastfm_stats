@@ -13,6 +13,8 @@ Find file with authentications in it
 Ensure that the file with Spotify & Last.fm authentications in it is in a subdirectory of the current Python
 shell directory. Note that if you are searching through your entire filesystem, the find() function will
 take a long time to execute.
+
+Testing commit
 '''
 def find(name, path):
     for root, dirs, files in os.walk(path):
