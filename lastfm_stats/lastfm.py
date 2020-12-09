@@ -25,7 +25,6 @@ class lastfm():
         if os.path.isabs(path) == False:
             if sys.platform == 'win32':
                 self.authfile = find(path, os.path.join('C:/', 'Users', self.user))
-                print(self.authfile, os.path.join('C:/', 'Users', self.user))
             elif sys.platform == 'linux':
                 self.authfile = find(path, os.path.join('/', 'home', self.user))
         else:
