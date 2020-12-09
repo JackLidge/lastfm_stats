@@ -7,6 +7,7 @@ setup(
     author='Jack Lidgley',
     license='MIT',
     url='https://github.com/JackLidge/Lastfm-Stats',
+    download_url='https://github.com/JackLidge/lastfm_stats/archive/v0.1.tar.gz',
     packages=find_packages(include=['lastfm_stats', 'lastfm_stats.*']),
     classifiers=[
         '''
