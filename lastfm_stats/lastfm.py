@@ -1,7 +1,10 @@
+import datetime
 import os
 import time
 import sys
 import requests
+import numpy as np
+import matplotlib.pyplot as plt
 import pandas as pd
 
 class lastfm():
@@ -93,3 +96,48 @@ class lastfm():
         # create and populate a dataframe to contain the data
         self.scrobbles = pd.DataFrame(scrobble_list)
         self.scrobbles['datetime'] = pd.to_datetime(self.scrobbles['timestamp'].astype(int), unit='s')
+        
+    def plot_scrobbles_over_time(self, bands, savefig=None):
+        '''
+        Add docstring here
+        '''
+        def get_artist_plays(scrobbles, dates, name):
+            artist_plays = []
+            for i in dates[::-1]:
+                day = scrobbles.loc[scrobbles['date'] == i]
+                day_count = day.artist_name.str.count(name).sum()
+                if len(artist_plays) == 0:
+                    artist_plays.append(day_count)
+                else:
+                    day_count = artist_plays[-1] + day_count
+                    artist_plays.append(day_count)
+            return artist_plays
+        
+        # Search for errored scrobble dates (pre lastfm existing), remove them and create new day 
+        # for them before first scrobble.
+        dates = self.scrobbles['datetime'].map(pd.Timestamp.date).unique()
+        correct_dates = [i for i in dates if i > datetime.date(2002, 1, 1)]
+        if len(dates) != len(correct_dates):
+            dates = dates.sort()
+            dates = np.append(dates, datetime.date(dates[-1].year, dates[-1].month, dates[-1].day-1))
+
+        # Converts the pandas timestamp to a datetime date object
+        for i, val in enumerate(self.scrobbles.iterrows()):
+            self.scrobbles.loc[i, 'date'] = pd.Timestamp.date(self.scrobbles.loc[i, 'datetime'])
+            if self.scrobbles.loc[i, 'date'] < datetime.date(2002, 1, 1):
+                self.scrobbles.loc[i, 'date'] = datetime.date(dates[-1].year, dates[-1].month, dates[-1].day-1)
+                
+        fig, ax = plt.subplots(figsize=[9,6])
+        if isinstance(bands, list) == True:
+            for band in bands:
+                y_vals = get_artist_plays(self.scrobbles, dates, band)
+                plt.plot(dates[::-1], y_vals, label=band)
+        else:
+            y_vals = get_artist_plays(self.scrobbles, dates, bands)
+            plt.plot(dates[::-1], y_vals, label=band)
+        plt.legend()
+        plt.xlabel('Date')
+        plt.ylabel('Scrobbles')
+        if savefig:
+            plt.savefig(savefig, dpi=300)
+        plt.show()

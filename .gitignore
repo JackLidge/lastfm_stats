@@ -1,3 +1,7 @@
+# Python Additions
 .vscode
-*.egg-info
 __pycache__
+
+# Package Additions
+*.egg-info
+dist
