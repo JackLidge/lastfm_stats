@@ -1,9 +1,11 @@
 Lastfm-Stats
 ============
 
+.. image:: https://pepy.tech/project/lastfm-stats
+    :target: https://pepy.tech/project/lastfm-stats
+
 Overview
 ========
-
 A package which gathers a users scrobbles from Last.fm.
 
 Requires a text file with the username and API key in the following format:
