@@ -2,12 +2,12 @@ from setuptools import setup, find_packages
 
 setup(
     name='lastfm_stats',
-    version='0.1',
+    version='0.2.1',
     description='A package to create statistics from a users last.fm',
     author='Jack Lidgley',
     license='MIT',
     url='https://github.com/JackLidge/Lastfm-Stats',
-    download_url='https://github.com/JackLidge/lastfm_stats/archive/v0.1.tar.gz',
+    download_url='https://github.com/JackLidge/lastfm_stats/archive/v0.2.1.tar.gz',
     packages=find_packages(include=['lastfm_stats', 'lastfm_stats.*']),
     classifiers=[
         'Development Status :: 3 - Alpha',
@@ -21,5 +21,6 @@ setup(
     install_requires=[
         'requests',
         'pandas',
+        'matplotlib'
     ]
 )
